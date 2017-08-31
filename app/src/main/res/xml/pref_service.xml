@@ -1,0 +1,8 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="service_tap_to_search"
+        android:title="탭하여 검색하기" />
+
+</PreferenceScreen>

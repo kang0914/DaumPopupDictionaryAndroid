@@ -6,7 +6,7 @@
         android:color="#fff"/>
     <stroke
         android:width="2dp"
-        android:color="#fff"/>
+        android:color="#000"/>
     <size
         android:width="60dp"
         android:height="60dp"

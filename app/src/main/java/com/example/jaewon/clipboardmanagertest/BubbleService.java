@@ -3,6 +3,7 @@ package com.example.jaewon.clipboardmanagertest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.IBinder;
@@ -17,7 +18,7 @@ import android.view.WindowManager;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AlwaysTopServiceTouch extends Service {
+public class BubbleService extends Service {
     private View mView;
     private WindowManager mManager;
     private WindowManager.LayoutParams mParams;
@@ -28,7 +29,11 @@ public class AlwaysTopServiceTouch extends Service {
     private boolean isMove = false;
 
     // by jw.kang
-    private final String LOG_TAG = "AlwaysTopServiceTouch";
+    private final String LOG_TAG = "BubbleService";
+
+    public static final String PREF_NAME = "PREF_AlwaysTopServiceTouch";
+    public static final String PREF_KEY_LASTVIEW_X = "LastViewX";
+    public static final String PREF_KEY_LASTVIEW_Y = "LastViewY";
 
     private  String searchText;
 
@@ -52,20 +57,6 @@ public class AlwaysTopServiceTouch extends Service {
 
                 case MotionEvent.ACTION_UP:
                     if (!isMove) {
-//                        Toast.makeText(getApplicationContext(), "ЕНДЎµК",
-//                                Toast.LENGTH_SHORT).show();
-
-                        // by jw.kang
-//                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.dic.daum.net/search.do?q=" +
-//                                encodeURIComponent(searchText) +
-//                                "&dic=all"));
-//                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(i);
-
-                        //FLAG_ACTIVITY_NEW_TASK
-//                        Intent intent = new Intent(getApplicationContext(), SearchResultService.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startService(intent);
 
                         Intent intent = new Intent(getApplicationContext(), SearchResultActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -89,21 +80,17 @@ public class AlwaysTopServiceTouch extends Service {
                         break;
                     }
 
-                    /**
-                     * mParams.gravityїЎ µыёҐ єОИЈ єЇ°ж
-                     *
-                     * LEFT : x°Ў +
-                     *
-                     * RIGHT : x°Ў -
-                     *
-                     * TOP : y°Ў +
-                     *
-                     * BOTTOM : y°Ў -
-                     */
                     mParams.x = mViewX + x;
                     mParams.y = mViewY + y;
 
                     mManager.updateViewLayout(mView, mParams);
+
+                    // 마지막 위치 저장
+                    SharedPreferences settings = getSharedPreferences(PREF_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putInt(PREF_KEY_LASTVIEW_X, mParams.x);
+                    editor.putInt(PREF_KEY_LASTVIEW_Y, mParams.y);
+                    editor.commit();
 
                     break;
             }
@@ -131,14 +118,22 @@ public class AlwaysTopServiceTouch extends Service {
                 PixelFormat.TRANSLUCENT);
         mParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
-        // by jw.kang
-        //mParams.windowAnimations = android.R.style.Animation_Toast;
+        // 나타났다 사라지는 애니메이션
         mParams.windowAnimations = R.style.PauseDialogAnimation;
+
+        //마지막 위치 적용
+        SharedPreferences settings = getSharedPreferences(PREF_NAME, 0);
+        int LastViewX = settings.getInt(PREF_KEY_LASTVIEW_X, 0);
+        int LastViewY = settings.getInt(PREF_KEY_LASTVIEW_Y, 0);
+        if(LastViewX != 0 || LastViewY != 0){
+            mParams.x = LastViewX;
+            mParams.y = LastViewY;
+        }
 
         mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mManager.addView(mView, mParams);
 
-        // by jw.kang
+        // 일정 시간 유지 후 사라지도록 함.
         mTask = new TimerTask() {
             @Override
             public void run() {

@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
 
-public class BlankFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-    //service_tap_to_search
+public class MainPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
     public static final String PREF_TAP_TO_SEARCH = "service_tap_to_search";
 
     @Override
@@ -42,8 +42,6 @@ public class BlankFragment extends PreferenceFragment implements SharedPreferenc
         Log.i("settings", "preference changed: " + key);
 
         if(key.equals(PREF_TAP_TO_SEARCH)) {
-            Preference pref = (Preference) findPreference(PREF_TAP_TO_SEARCH);
-
             boolean bTapToSearch = sharedPreferences.getBoolean(PREF_TAP_TO_SEARCH, true);
 
             if(bTapToSearch)

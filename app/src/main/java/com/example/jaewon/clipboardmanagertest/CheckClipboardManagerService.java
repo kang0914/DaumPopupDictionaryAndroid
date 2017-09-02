@@ -37,7 +37,7 @@ public class CheckClipboardManagerService extends Service {
                 pasteData = item.getText();
                 Log.d(LOG_TAG, "onPrimaryClipChanged : " + pasteData);
 
-                Intent intent = new Intent(getApplicationContext(), AlwaysTopServiceTouch.class);
+                Intent intent = new Intent(getApplicationContext(), BubbleService.class);
                 intent.putExtra("search_text", pasteData);
                 startService(intent);
             }

@@ -1,19 +1,15 @@
 package com.example.jaewon.clipboardmanagertest;
 
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-    // by jw.kang
-    private PackageReceiver mPackageReceiver = new PackageReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,25 +20,27 @@ public class MainActivity extends AppCompatActivity {
 
         // by jw.kang
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragmentBorC, new BlankFragment())
+                .replace(R.id.fragmentBorC, new MainPreferenceFragment())
                 .commit();
 
-        // by jw.kang
-        this.registerReceiver(mPackageReceiver, new IntentFilter(Intent.ACTION_PACKAGE_ADDED));
+        //프로그램 시작시 설정에 따라서 서비스 시작
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences (this);
+        Boolean bTapToSearch = prefs.getBoolean(MainPreferenceFragment.PREF_TAP_TO_SEARCH, true);
+        if(bTapToSearch)
+            startService(new Intent(this, CheckClipboardManagerService.class));
+        else
+            stopService(new Intent(this, CheckClipboardManagerService.class));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        // by jw.kang
-        unregisterReceiver( mPackageReceiver );
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -54,25 +52,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void mStart(View v) {
-
-        startService(new Intent(this, CheckClipboardManagerService.class));
-    }
-
-    public void mStop(View v) {
-
-        stopService(new Intent(this, CheckClipboardManagerService.class));
-    }
-
-    public void showSetting(View v) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
     }
 }

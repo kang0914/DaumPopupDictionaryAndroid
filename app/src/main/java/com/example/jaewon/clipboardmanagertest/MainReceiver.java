@@ -5,17 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class MyReceiver extends BroadcastReceiver {
+public class MainReceiver extends BroadcastReceiver {
 
-    public MyReceiver() {
+    public MainReceiver() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        // 부팅 완료 후
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log.d("MyReceiver", "onReceive");
-
             Intent i = new Intent(context, CheckClipboardManagerService.class);
             context.startService(i);
         }

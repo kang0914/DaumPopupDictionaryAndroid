@@ -28,39 +28,18 @@
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".AlwaysTopServiceTouch"
+            android:name=".BubbleService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".MyReceiver"
+            android:name=".MainReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".PackageReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-
-        <service
-            android:name=".SearchResultService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".SearchResultActivity"

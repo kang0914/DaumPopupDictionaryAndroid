@@ -1,13 +1,11 @@
-package com.example.jaewon.clipboardmanagertest;
+package com.soul0914.daumpopupdictionary;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.IBinder;
-import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;

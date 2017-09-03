@@ -1,4 +1,4 @@
-package com.example.jaewon.clipboardmanagertest;
+package com.soul0914.daumpopupdictionary;
 
 import android.content.Intent;
 import android.os.Bundle;

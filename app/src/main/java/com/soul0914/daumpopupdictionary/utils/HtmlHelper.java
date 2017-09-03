@@ -1,4 +1,4 @@
-package com.example.jaewon.clipboardmanagertest.utils;
+package com.soul0914.daumpopupdictionary.utils;
 
 /**
  * Created by Jaewon on 2017-09-02.

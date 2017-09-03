@@ -1,8 +1,7 @@
-package com.example.jaewon.clipboardmanagertest;
+package com.soul0914.daumpopupdictionary;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -11,7 +10,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.jaewon.clipboardmanagertest.utils.HtmlHelper;
+import com.soul0914.daumpopupdictionary.utils.HtmlHelper;
 
 public class SearchResultActivity extends Activity {
 

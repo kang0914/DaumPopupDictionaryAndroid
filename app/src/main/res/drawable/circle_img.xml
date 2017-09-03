@@ -5,7 +5,7 @@
 
     <item android:drawable="@drawable/circle_big"/>
     <item
-        android:drawable="@drawable/dictionary32"
+        android:drawable="@mipmap/bubble"
         android:top="10dp"
         android:bottom="10dp"
         android:right="10dp"

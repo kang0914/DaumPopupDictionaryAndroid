@@ -39,8 +39,8 @@ public class BubbleService extends Service {
     private Timer mTimer;
 
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -57,10 +57,12 @@ public class BubbleService extends Service {
                     if (!isMove) {
 
                         Intent intent = new Intent(getApplicationContext(), SearchResultActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("search_text", searchText);
                         startActivity(intent);
 
+                        SavePosition();
                         stopSelf();
                     }
 
@@ -83,13 +85,6 @@ public class BubbleService extends Service {
 
                     mManager.updateViewLayout(mView, mParams);
 
-                    // 마지막 위치 저장
-                    SharedPreferences settings = getSharedPreferences(PREF_NAME, 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(PREF_KEY_LASTVIEW_X, mParams.x);
-                    editor.putInt(PREF_KEY_LASTVIEW_Y, mParams.y);
-                    editor.commit();
-
                     break;
             }
 
@@ -111,8 +106,10 @@ public class BubbleService extends Service {
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+//                WindowManager.LayoutParams.TYPE_PHONE,
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
         mParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
@@ -136,6 +133,8 @@ public class BubbleService extends Service {
             @Override
             public void run() {
                 Log.d(LOG_TAG, "TimerTask run()");
+
+                SavePosition();
                 stopSelf();
             }
         };
@@ -160,9 +159,9 @@ public class BubbleService extends Service {
         Log.d(LOG_TAG, "onDestroy");
 
         if (mView != null) {
+            mView.setOnTouchListener(null);
             mManager.removeView(mView);
             mView = null;
-
             mTimer.cancel();
         }
     }
@@ -170,5 +169,14 @@ public class BubbleService extends Service {
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
+    }
+
+    // 마지막 위치 저장
+    private void SavePosition(){
+        SharedPreferences settings = getSharedPreferences(PREF_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(PREF_KEY_LASTVIEW_X, mParams.x);
+        editor.putInt(PREF_KEY_LASTVIEW_Y, mParams.y);
+        editor.commit();
     }
 }

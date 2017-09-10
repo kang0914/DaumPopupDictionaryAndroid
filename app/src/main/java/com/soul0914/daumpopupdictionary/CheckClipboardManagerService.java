@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 public class CheckClipboardManagerService extends Service {
@@ -53,5 +54,11 @@ public class CheckClipboardManagerService extends Service {
         Log.d(LOG_TAG, "onDestroy");
 
         clipBoard.removePrimaryClipChangedListener( primaryClipChangedListener );
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // If we get killed, after returning from here, restart
+        return START_STICKY;
     }
 }

@@ -35,7 +35,10 @@ public class CheckClipboardManagerService extends Service {
             public void onPrimaryClipChanged() {
                 CharSequence pasteData = "";
                 ClipData.Item item = clipBoard.getPrimaryClip().getItemAt(0);
-                pasteData = item.getText();
+                // 2017.10.29 add by jw.kang
+                // android.text.SpannableString cannot be cast to java.lang.String 발생함.
+                // https://stackoverflow.com/questions/27479181/why-show-java-lang-classcastexception-android-text-spannablestring-cannot-be-ca
+                pasteData = "" + item.getText();
                 Log.d(LOG_TAG, "onPrimaryClipChanged : " + pasteData);
 
                 Intent intent = new Intent(getApplicationContext(), BubbleService.class);

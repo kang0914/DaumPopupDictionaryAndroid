@@ -12,6 +12,11 @@ import android.webkit.WebViewClient;
 
 import com.soul0914.daumpopupdictionary.utils.HtmlHelper;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class SearchResultActivity extends Activity {
 
     public static final String KEY_SEARCHTEXT = "KEY_SEARCHTEXT";
@@ -59,6 +64,31 @@ public class SearchResultActivity extends Activity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+
+            // 다음 모바일 페이지에 JavaScript를 추가하기 위함.
+            StringBuilder sb = new StringBuilder();
+            InputStream is = null;
+
+            try {
+                is = getAssets().open("inject.js");
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                String str;
+                while ((str = br.readLine()) != null) {
+                    sb.append(str);
+                }
+                br.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            view.loadUrl("javascript:" + sb.toString());
         }
     }
 }
